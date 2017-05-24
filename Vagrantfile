@@ -47,7 +47,7 @@ Vagrant.configure(2) do |config|
   
   
   
-  (1..6).each do |i|
+  (1..3).each do |i|
     config.vm.define "node-#{i}" do |d|
       d.vm.box = "ubuntu/trusty64"
       d.vm.hostname = "node-#{i}"
@@ -58,6 +58,7 @@ Vagrant.configure(2) do |config|
 	  d.vm.provision :shell, path: "set-apt-cache.sh"
       d.vm.provision :shell, path: "install-docker.sh"
 	  d.vm.provision :shell, path: "set-registry.sh"
+	  d.vm.provision :shell, path: "install-node.sh"
       d.vm.provider "virtualbox" do |v|
         v.memory = 2048
 		v.cpus = 2
