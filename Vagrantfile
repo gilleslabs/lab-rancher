@@ -47,7 +47,7 @@ Vagrant.configure(2) do |config|
   
   
   
-  (1..3).each do |i|
+  (1..6).each do |i|
     config.vm.define "node-#{i}" do |d|
       d.vm.box = "ubuntu/trusty64"
       d.vm.hostname = "node-#{i}"
