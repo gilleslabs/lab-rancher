@@ -36,6 +36,8 @@ Vagrant.configure(2) do |config|
     d.vm.provision :shell, path: "install-nfs.sh"
     d.vm.provision :shell, path: "install-bind.sh"
 	d.vm.provision :shell, path: "install-rebound.sh"
+	d.vm.provision :shell, inline: "sudo echo nameserver 10.200.194.100 > /run/resolvconf/resolv.conf"
+	d.vm.provision :shell, path: "vagrant-dns-patch.sh"
 	d.vm.provision :shell, path: "install-rancher.sh"
 	d.vm.provider "virtualbox" do |v|
       v.memory = 2048
@@ -45,8 +47,8 @@ Vagrant.configure(2) do |config|
   
   
   
-  (1..3).each do |i|
-    config.vm.define "swarm-#{i}" do |d|
+  (1..6).each do |i|
+    config.vm.define "node-#{i}" do |d|
       d.vm.box = "ubuntu/trusty64"
       d.vm.hostname = "swarm-#{i}"
       d.vm.network "private_network", ip: "10.200.192.20#{i}"
@@ -57,29 +59,10 @@ Vagrant.configure(2) do |config|
       d.vm.provision :shell, path: "install-docker.sh"
 	  d.vm.provision :shell, path: "set-registry.sh"
       d.vm.provider "virtualbox" do |v|
-        v.memory = 1024
+        v.memory = 2048
 		v.cpus = 2
       end
     end
   end
   
-  (1..3).each do |i|
-    config.vm.define "cattle-#{i}" do |d|
-      d.vm.box = "ubuntu/trusty64"
-      d.vm.hostname = "cattle-#{i}"
-      d.vm.network "private_network", ip: "10.200.192.22#{i}"
-	  d.vm.network "private_network", ip: "10.200.193.22#{i}"
-	  d.vm.provision :shell, inline: "sudo echo nameserver 10.200.194.100 > /run/resolvconf/resolv.conf"
-      d.vm.provision :shell, path: "vagrant-dns-patch.sh"
-	  d.vm.provision :shell, path: "set-apt-cache.sh"
-      d.vm.provision :shell, path: "install-docker.sh"
-	  d.vm.provision :shell, path: "set-registry.sh"
-	  d.vm.provision :shell, path: "install-node.sh"
-      d.vm.provider "virtualbox" do |v|
-        v.memory = 1024
-		v.cpus = 2
-      end
-    end
   end
-  
-end
