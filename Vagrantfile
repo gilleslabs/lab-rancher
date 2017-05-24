@@ -50,7 +50,7 @@ Vagrant.configure(2) do |config|
   (1..6).each do |i|
     config.vm.define "node-#{i}" do |d|
       d.vm.box = "ubuntu/trusty64"
-      d.vm.hostname = "swarm-#{i}"
+      d.vm.hostname = "node-#{i}"
       d.vm.network "private_network", ip: "10.200.192.20#{i}"
 	  d.vm.network "private_network", ip: "10.200.193.20#{i}"
 	  d.vm.provision :shell, inline: "sudo echo nameserver 10.200.194.100 > /run/resolvconf/resolv.conf"
